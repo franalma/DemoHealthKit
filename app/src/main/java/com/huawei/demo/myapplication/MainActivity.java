@@ -1,8 +1,13 @@
 package com.huawei.demo.myapplication;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import com.huawei.hihealthkit.auth.HiHealthOpenPermissionType;
@@ -21,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements LoginTools.LoginDelegate,
-        HealthKitTools.HealthKitToolsDelegate, HealthAppBridge.HealthAppDelegate {
+        HealthKitTools.HealthKitToolsDelegate, HealthAppBridge.HealthAppDelegate, Bluetooth.BluetoothDelegate {
 
     private final static int REQUEST_LOGIN = 2001;
     private DataController dataController;
@@ -31,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoginTools.LoginD
 
     int[] write = new int[] {HiHealthOpenPermissionType.HEALTH_OPEN_PERMISSION_TYPE_WRITE_DATA_SET_WEIGHT};
 
-
+    final String BARRIER_RECEIVER_ACTION = "BLUETOOTH_BARRIER_RECEIVER_ACTION";
     private SampleSet createData(){
         try{
             DataCollector collector = new DataCollector.Builder().setPackageName(this)
@@ -66,7 +71,10 @@ public class MainActivity extends AppCompatActivity implements LoginTools.LoginD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LoginTools.signIn(this, this);
+//        LoginTools.signIn(this, this);
+
+        registerReceiver(new BluetoothReceiver(),new IntentFilter(BluetoothDevice.ACTION_FOUND));
+//        registerReceiver(new BluetoothReceiver(),new IntentFilter(BARRIER_RECEIVER_ACTION));
     }
 
     @Override
@@ -98,6 +106,28 @@ public class MainActivity extends AppCompatActivity implements LoginTools.LoginD
 
         HealthKitTools.getInstance().syncWithFitnessHealth(dataController, this);
     }
+
+
+    public void scanBtDevices (View view){
+        Bluetooth.getInstance().scan();
+//        Bluetooth.getInstance().pair();
+    }
+
+    public void getRealTimeHearthInfo (View view){
+//        HealthAppBridge.getInstance().readRealTimeData(this);
+        HealthAppBridge.getInstance().startReadingRealTimeSportData(this);
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void scanBleDevices (View view){
+//        Bluetooth.getInstance().scanBle(this);
+
+        Bluetooth.getInstance().scanAwaranness(this, BARRIER_RECEIVER_ACTION);
+    }
+
+
 
     public void syncWithHealthApp(View view){
 
@@ -214,6 +244,11 @@ public class MainActivity extends AppCompatActivity implements LoginTools.LoginD
 
     @Override
     public void onDataWriteError(HealthAppBridge.HealthAppDataType dataType, int errorCode) {
+
+    }
+
+    @Override
+    public void onNewDeviceDetected(BluetoothDevice device) {
 
     }
 }

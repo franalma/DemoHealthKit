@@ -44,6 +44,27 @@
           android:text="Health App Tools"
           android:onClick="syncWithHealthApp"
           />
+      <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Get heart rate"
+          android:onClick="getRealTimeHearthInfo"
+          />
+
+      <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Scan BLE devices"
+          android:onClick="scanBleDevices"
+          />
+
+      <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Scan BT devices"
+          android:onClick="scanBtDevices"
+          />
+
 
 
 

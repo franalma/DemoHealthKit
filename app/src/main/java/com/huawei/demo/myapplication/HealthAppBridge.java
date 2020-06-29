@@ -1,11 +1,21 @@
 package com.huawei.demo.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import com.huawei.hihealth.error.HiHealthError;
 import com.huawei.hihealth.listener.ResultCallback;
 import com.huawei.hihealthkit.auth.HiHealthAuth;
 import com.huawei.hihealthkit.auth.IAuthorizationListener;
+import com.huawei.hihealthkit.data.HiHealthKitConstant;
 import com.huawei.hihealthkit.data.store.HiHealthDataStore;
+import com.huawei.hihealthkit.data.store.HiRealTimeListener;
+import com.huawei.hihealthkit.data.store.HiSportDataCallback;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class HealthAppBridge {
@@ -63,6 +73,66 @@ public class HealthAppBridge {
             }
         });
     }
+
+    public void readRealTimeData(Context context){
+//        HiHealthDataStore.startReadingHeartRate(context, new HiRealTimeListener() {
+//            @Override
+//            public void onResult(int state) {
+//                System.out.println("---result state: "+state);
+//            }
+//
+//            @Override
+//            public void onChange(int resultCode, String value) {
+//                try{
+//                    System.out.println("----value: "+value);
+//                    JSONObject joc = new JSONObject(value);
+//                    int hearRate = Integer.parseInt(joc.getString("hr_info"));
+//
+//                }catch(Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+
+        HiHealthDataStore.startReadingRri(context, new HiRealTimeListener() {
+            @Override
+            public void onResult(int i) {
+                System.out.println("---state: "+i);
+            }
+
+            @Override
+            public void onChange(int resultCode, String value) {
+                System.out.println("--resultcode: "+resultCode);
+                System.out.println("---value: "+value);
+            }
+        });
+    }
+
+    public void startReadingRealTimeSportData(Context context){
+        HiHealthDataStore.startRealTimeSportData(context, new HiSportDataCallback() {
+            @Override
+            public void onResult(int state) {
+                Log.i(TAG, "startRealTimeSport onResult state:" + state);
+            }
+            @Override
+            public void onDataChanged(int resultCode, Bundle value) {
+                Log.i(TAG, "startRealTimeSport onChange resultCode: " + resultCode);
+                if (value != null) {
+                    // Here we only extract distance and duration as an example, find more in
+                    // HiHealthKitConstant
+                    StringBuilder builder = new StringBuilder("RealTimeSport: ");
+                    builder.append(HiHealthKitConstant.BUNDLE_KEY_DISTANCE)
+                            .append(":")
+                            .append(value.getInt(HiHealthKitConstant.BUNDLE_KEY_DISTANCE));
+                    builder.append(HiHealthKitConstant.BUNDLE_KEY_DURATION)
+                            .append(":")
+                            .append(value.getInt(HiHealthKitConstant.BUNDLE_KEY_DURATION));
+                    Log.i(TAG, builder.toString());
+                }
+            }
+        });
+    }
+
 
     public static HealthAppBridge getInstance(){
         if (instance == null){

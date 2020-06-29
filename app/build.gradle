@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.huawei.demo.myapplication"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -35,7 +35,15 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+
 }
+
+
 apply plugin: 'com.huawei.agconnect'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -47,4 +55,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.huawei.agconnect:agconnect-core:1.0.0.300'
     implementation 'com.huawei.hms:hihealth-base:4.0.4.300'
+    implementation  'com.huawei.hms:awareness:1.0.4.301'
 }

@@ -7,19 +7,11 @@ import com.huawei.hmf.tasks.Task;
 import com.huawei.hms.hihealth.DataController;
 import com.huawei.hms.hihealth.HiHealthOptions;
 import com.huawei.hms.hihealth.HuaweiHiHealth;
-import com.huawei.hms.hihealth.data.DataCollector;
-import com.huawei.hms.hihealth.data.DataType;
-import com.huawei.hms.hihealth.data.Field;
-import com.huawei.hms.hihealth.data.SamplePoint;
 import com.huawei.hms.hihealth.data.SampleSet;
 import com.huawei.hms.hihealth.options.ReadOptions;
 import com.huawei.hms.hihealth.result.ReadReply;
 import com.huawei.hms.support.hwid.HuaweiIdAuthManager;
 import com.huawei.hms.support.hwid.result.AuthHuaweiId;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class HealthKitTools {
 
